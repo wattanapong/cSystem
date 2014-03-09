@@ -1,6 +1,9 @@
 <?php
 
 // change the following paths if necessary
+
+// path of yii framework stay at D:/Git/yii
+// this index.php stay at  D:/copy/workspace/www/cSystem/index.php
 $yii=dirname(__FILE__).'/../../../../Git/yii/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
 

@@ -1,11 +1,10 @@
 <?php
 
 // change the following paths if necessary
-
-// path of yii framework stay at D:/Git/yii
-// this index.php stay at  D:/copy/workspace/www/cSystem/index.php
-$yii=dirname(__FILE__).'/../../../../Git/yii/framework/yii.php';
+$yii=dirname(__FILE__).'/../YiiFramework/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
+require_once dirname(__FILE__).'/function/mydate.php';
+require_once dirname(__FILE__).'/function/fixBugYii.php';
 
 // remove the following lines when in production mode
 defined('YII_DEBUG') or define('YII_DEBUG',true);

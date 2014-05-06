@@ -7,6 +7,8 @@
  */
 class UserIdentity extends CUserIdentity
 {
+	
+	const ERROR_USERNAME_NOT_ACTIVE = 3;
 	/**
 	 * Authenticates a user.
 	 * The example implementation makes sure if the username and password
@@ -15,19 +17,28 @@ class UserIdentity extends CUserIdentity
 	 * against some persistent user identity storage (e.g. database).
 	 * @return boolean whether authentication succeeds.
 	 */
-	public function authenticate()
+	
+	private $_id;
+	
+public function authenticate()
 	{
-		$users=array(
-			// username => password
-			'demo'=>'demo',
-			'admin'=>'admin',
-		);
-		if(!isset($users[$this->username]))
-			$this->errorCode=self::ERROR_USERNAME_INVALID;
-		elseif($users[$this->username]!==$this->password)
-			$this->errorCode=self::ERROR_PASSWORD_INVALID;
+		$record=Member::model()->findByAttributes(array('username'=>$this->username));
+		if($record===null || $record->password!==md5($this->password))
+			//$this->errorCode=self::ERROR_USERNAME_INVALID;
+			//$this->errorCode=self::ERROR_PASSWORD_INVALID;
+		$this->errorCode=self::ERROR_USERNAME_INVALID.self::ERROR_PASSWORD_INVALID;
 		else
+		{
+			if ($record->status == 0 ) $this->errorCode = self::ERROR_USERNAME_NOT_ACTIVE;//"";
+			else{
+			$this->_id=$record->id;
+			$this->setState('id', $record->id);
+			$this->setState('title', $record->name);
+			//$this->setState('role', $record->username);
 			$this->errorCode=self::ERROR_NONE;
+			}
+			//$_rule = Privilege::model()->findByAttributes(array('id'=>$this->_id));
+		}
 		return !$this->errorCode;
 	}
 }

@@ -3,7 +3,7 @@ body
 	margin: 0;
 	padding: 0;
 	color: #555;
-	font: normal 10pt Arial,Helvetica,sans-serif;
+	font: normal 14px Arial,Helvetica,sans-serif !important;
 	background: #EFEFEF;
 }
 
@@ -226,4 +226,35 @@ div.search-form
 .operations li a:hover
 {
 	background: #80CFFF;
+}
+
+[class*="span"]{
+	margin: 5px !important;
+}
+
+input[type="text"], select, textarea,input[type="password"],
+input[type="datetime"],input[type="datetime-local"],input[type="date"],
+input[type="month"],input[type="time"],input[type="week"], 
+input[type="number"],input[type="email"],input[type="url"],
+input[type="search"],input[type="tel"],input[type="color"],.uneditable-input {
+	height: 28px !important;
+	font-size:0.9em;
+}
+
+.myform table,.myform .hero-unit, div.hero-unit,table#yw0{
+	font-size:1em;
+}
+
+div#tab1.hero-unit,div#tab2.hero-unit,div#tab3.hero-unit{
+	padding:2px 4px;
+	width:100%;
+}
+
+
+div#content,div#yw10.portlet{
+	padding:0px;
+}
+
+table.items.table{
+	font-size:1em;
 }

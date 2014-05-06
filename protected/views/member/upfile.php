@@ -29,9 +29,9 @@ $this->menu=array(
 <div class="h20"></div>
 <span class="label label-info" style="padding:10px;font-size:1.2em;cursor:hand" onclick="$('.panel-default').toggle()">
 รายละเอียดการกำหนดค่า เลขแทนเพศ(prefix_id),privilege_id, เลขประจำสาขาวิชา(major_id)
-<div class="panel panel-default" style="font-size:1em;cursor:none;display:none;">
+<div class="panel panel-default" style="font-size:.8em;cursor:text;color:#000;display:none;">
   <div class="panel-heading">เลขแทนเพศ(prefix_id)</div>
-  <div class="panel-body">
+  <div class="panel-body" style="text-shadow: none; line-height: auto;font-weight:normal;">
     ชาย ให้แทนด้วย 1<br>
     หญิง ให้แทนด้วย 2
   </div>

@@ -49,7 +49,7 @@
 
 	<?php echo $content; ?>
 
-	<div class="clear" style="height: 30px"></div>
+	<div class="clear" style="height: 0px"></div>
 
 	<footer class="modal-footer">
 			<h4>

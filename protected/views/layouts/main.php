@@ -60,6 +60,9 @@
 				<a href="http://www.ict.up.ac.th">Software Engineering, School of
 					Information Communication Technology(ICT), University of Phayao</a>
 			</h5>
+			<h6>
+				<a href="https://www.google.com/intl/en/chrome/browser">Best appearance with latest version of Chrome</a>
+			</h6>
 		</footer><!-- footer -->
 
 </div><!-- page -->

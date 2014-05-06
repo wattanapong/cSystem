@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 );
 ?>
 <div class="hero-unit ">
-<h1>Contact Us</h1>
+<h1>ติดต่อผู้ดูแลระบบ</h1>
 
 <?php if(Yii::app()->user->hasFlash('contact')): ?>
 
@@ -20,7 +20,7 @@ $this->breadcrumbs=array(
 <?php else: ?>
 
 <p>
-If you have business inquiries or other questions, please fill out the following form to contact us. Thank you.
+		กรุณากรอกข้อมูลให้ครบทุกช่องเพื่อใช้ในการติดต่อกลับ
 </p>
 
 <div class="form">
@@ -32,8 +32,6 @@ If you have business inquiries or other questions, please fill out the following
 		'validateOnSubmit'=>true,
 	),
 )); ?>
-
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -68,15 +66,18 @@ If you have business inquiries or other questions, please fill out the following
 		<?php $this->widget('CCaptcha'); ?>
 		<?php echo $form->textField($model,'verifyCode'); ?>
 		</div>
-		<div class="hint">Please enter the letters as they are shown in the image above.
-		<br/>Letters are not case-sensitive.</div>
+		<div class="hint">กรุณากรอกข้อความยืนยันตามรูปภาพ(ตัวเล็ก-ใหญ่ไม่มีผล)</div>
 		<?php echo $form->error($model,'verifyCode'); ?>
 	</div>
 	<?php endif; ?>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Submit'); ?>
-	</div>
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'submit',
+			'type'=>'primary',
+			'label'=> 'ส่ง',
+			'htmlOptions'=> array('style'=>'margin-top:30px;padding:10px 30px;'),
+		)); ?>
+</div>
 
 <?php $this->endWidget(); ?>
 

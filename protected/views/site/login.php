@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<div class="hero-unit text-center" style="width:500px; margin:0 auto">
+<div class="hero-unit text-center" style="width:500px; margin:0 auto 20px auto">
 
 <h2>Login</h2>
 

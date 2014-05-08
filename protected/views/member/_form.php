@@ -85,3 +85,4 @@ else $privileges = Privilege::model()->findAll();
 </div>
 
 <?php $this->endWidget(); ?>
+

@@ -85,7 +85,7 @@ echo $form->error($model, 'memberlist');
 <?php 
 $this->endWidget();
 $i =0;
-$keys = ['completed'=>'info','failed'=>'error'];
+$keys = array('completed'=>'info','failed'=>'error');
 if ($msg != "" && $type != "" ){
 
 	if ( is_array($msg) ){

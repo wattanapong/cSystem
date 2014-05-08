@@ -29,6 +29,7 @@
 						'items'=>array(
 								array('label'=>'Home', 'url'=>array('/site/index')),
 								array('label'=>'Member', 'url'=>array('/member/admin'), 'visible'=>(!Yii::app()->user->isStudent() && !Yii::app()->user->isGuest)) ,
+								array('label'=>'Course', 'url'=>array('/course/admin'), 'visible'=>(!Yii::app()->user->isStudent() && !Yii::app()->user->isGuest)) ,
 								array('label'=>'Profile', 'url'=>array('/member/profile/'.Yii::app()->user->id), 'visible'=>!Yii::app()->user->isGuest),
 								array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
 								array('label'=>'Contact', 'url'=>array('/site/contact')),

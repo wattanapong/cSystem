@@ -50,7 +50,7 @@ class LoginForm extends CFormModel
 		{
 			$this->_identity=new UserIdentity($this->username,$this->password);
 			if( !$this->_identity->authenticate()  ){ //$this->_identity->errorCode;
-				$msg = ['12'=>'ชื่อหรือรหัสผ่านผิด','3'=>'กรุณารอการยืนยันสถานะสมาชิก'];
+				$msg = array('12'=>'ชื่อหรือรหัสผ่านผิด','3'=>'กรุณารอการยืนยันสถานะสมาชิก');
 				$this->addError('password',$msg[$this->_identity->errorCode]);
 			}
 		}

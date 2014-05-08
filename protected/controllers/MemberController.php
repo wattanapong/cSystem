@@ -137,22 +137,22 @@ private function insertMembers($file){
 	"คอมพิวเตอร์ธุรกิจ","เทคโนโลยีสารสนเทศ","ภูมิสารสนเทศศาสตร์","วิทยาการคอมพิวเตอร์","เทคโนโลยีคอมพิวเตอร์เคลื่อนที่");
 	
 	$fp = fopen($file,'r');
-	$msg = [];
-	$key = [];
+	$msg = array();
+	$key = array();
 	if ($fp) {
 		
 		//read header
 		if (($buffer = fgets($fp, 4096)) !== false ) {
 		$line = explode(",",$buffer);
 			if ( !in_array("username", $line) && !in_array("code", $line) ) 
-				$msg[] = ['failed'=>"ต้องกำหนด username หรือรหัสนิสิต โดยใช้หัวข้อ csv เป็น username หรือ code ตามลำดับ"];
-			elseif ( !in_array("name", $line) ) $msg[] = ['failed'=>"ต้องกำหนดชื่อ โดยใช้หัวข้อ csv เป็น name"];
+				$msg[] = array('failed'=>"ต้องกำหนด username หรือรหัสนิสิต โดยใช้หัวข้อ csv เป็น username หรือ code ตามลำดับ");
+			elseif ( !in_array("name", $line) ) $msg[] = array('failed'=>"ต้องกำหนดชื่อ โดยใช้หัวข้อ csv เป็น name");
 			
 			else {
 				foreach($line as $l){
 					$no = array_search(trim($l), $header);
 					if (false === $no ) {
-						$msg[] = ['failed'=>"หัวข้อ ".$l." ไม่มีในข้อกำหนด"];
+						$msg[] = array('failed'=>"หัวข้อ ".$l." ไม่มีในข้อกำหนด");
 						break;
 					}else{
 						$key[] = $header[$no];
@@ -184,17 +184,17 @@ private function insertMembers($file){
 				//0 = id , 1 = name
 				if ( isset($line['name']) && Member::model()->find(" name = '".$line['name']."' AND  surname = '".@$line['surname']."' OR 
 						name = '".preg_replace("/นาย|นาง|นางสาว|\s/", "", $line['name'])."' ") !== null)
-					$msg[] =  ['failed'=>$line['name']." ".$line['surname']." มีอยู่แล้ว "];
+					$msg[] =  array('failed'=>$line['name']." ".$line['surname']." มีอยู่แล้ว ");
 				elseif ( isset($line['username']) &&  Member::model()->find(" username = '".$line['username']."' ") !== null)
 				//echo "username หรือรหัสประจำตัว ".$line['username']." มีอยู่แล้ว  <br>";
-				$msg[] =  ['failed'=>"username หรือรหัสประจำตัว ".$line['username']." มีอยู่แล้ว "];
+				$msg[] =  array('failed'=>"username หรือรหัสประจำตัว ".$line['username']." มีอยู่แล้ว ");
 				else{
 					
 					$member = new Member();
 					$line['password'] = md5('1234');
 					$member->attributes = $line;
-					if ($member->save() ) $msg[] =  ['completed'=>"username ".$line['username']." สร้างสำเร็จ "];
-					else $msg[] =  ['failed'=>"username ".$line['username']." ไม่สามารถสร้างได้ "];
+					if ($member->save() ) $msg[] =  array('completed'=>"username ".$line['username']." สร้างสำเร็จ ");
+					else $msg[] =  array('failed'=>"username ".$line['username']." ไม่สามารถสร้างได้ ");
 /* 					print_r($member->getErrors());
 					die(); */
 				}
@@ -202,7 +202,7 @@ private function insertMembers($file){
 		}
 		}
 		else{
-			$msg[] =  ['failed'=>"กรุณาอัพโหลดไฟล์ที่มีข้อมูลตามรูปแบบที่กำหนด"];
+			$msg[] =  array('failed'=>"กรุณาอัพโหลดไฟล์ที่มีข้อมูลตามรูปแบบที่กำหนด");
 		}
 	}
 	return $msg;

@@ -8,6 +8,9 @@
 </p>
 
 <?php echo $form->errorSummary($model,$modelCS); ?>
+
+<?php echo $form->hiddenField($model,'id'); ?>
+
 <?php //autocompleted ?>
 		<?php echo $form->labelEx($model,'code'); ?>
 		<?php

@@ -23,5 +23,6 @@ array('label'=>'Manage Course','url'=>array('admin')),
 		'valueTh',
 		'valueEn',
 		'semester_id',
+		'yeared_id',
 ),
 )); ?>

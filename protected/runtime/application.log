@@ -11624,3 +11624,69 @@ Stack trace:
 REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
 HTTP_REFERER=http://127.0.0.1/csystem/index.php/course/create
 ---
+2014/05/08 10:20:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "img".' in E:\Copy\workspace\www\YiiFramework\framework\web\CController.php:483
+Stack trace:
+#0 E:\Copy\workspace\www\YiiFramework\framework\web\CController.php(270): CController->missingAction('img')
+#1 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(282): CController->run('img')
+#2 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(141): CWebApplication->runController('course/img/ui-a...')
+#3 E:\Copy\workspace\www\YiiFramework\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#4 E:\Copy\workspace\www\cSystem\index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
+HTTP_REFERER=http://localhost/csystem/index.php/course/create
+---
+2014/05/08 10:21:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "img".' in E:\Copy\workspace\www\YiiFramework\framework\web\CController.php:483
+Stack trace:
+#0 E:\Copy\workspace\www\YiiFramework\framework\web\CController.php(270): CController->missingAction('img')
+#1 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(282): CController->run('img')
+#2 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(141): CWebApplication->runController('course/img/ui-a...')
+#3 E:\Copy\workspace\www\YiiFramework\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#4 E:\Copy\workspace\www\cSystem\index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
+HTTP_REFERER=http://127.0.0.1/csystem/index.php/course/create
+---
+2014/05/08 10:26:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "img".' in E:\Copy\workspace\www\YiiFramework\framework\web\CController.php:483
+Stack trace:
+#0 E:\Copy\workspace\www\YiiFramework\framework\web\CController.php(270): CController->missingAction('img')
+#1 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(282): CController->run('img')
+#2 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(141): CWebApplication->runController('course/img/ui-a...')
+#3 E:\Copy\workspace\www\YiiFramework\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#4 E:\Copy\workspace\www\cSystem\index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
+HTTP_REFERER=http://127.0.0.1/csystem/index.php/course/create
+---
+2014/05/08 10:27:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "img".' in E:\Copy\workspace\www\YiiFramework\framework\web\CController.php:483
+Stack trace:
+#0 E:\Copy\workspace\www\YiiFramework\framework\web\CController.php(270): CController->missingAction('img')
+#1 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(282): CController->run('img')
+#2 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(141): CWebApplication->runController('course/img/ui-a...')
+#3 E:\Copy\workspace\www\YiiFramework\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#4 E:\Copy\workspace\www\cSystem\index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
+HTTP_REFERER=http://127.0.0.1/csystem/index.php/course/create
+---
+2014/05/08 10:28:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "img".' in E:\Copy\workspace\www\YiiFramework\framework\web\CController.php:483
+Stack trace:
+#0 E:\Copy\workspace\www\YiiFramework\framework\web\CController.php(270): CController->missingAction('img')
+#1 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(282): CController->run('img')
+#2 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(141): CWebApplication->runController('course/img/ui-a...')
+#3 E:\Copy\workspace\www\YiiFramework\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#4 E:\Copy\workspace\www\cSystem\index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
+HTTP_REFERER=http://127.0.0.1/csystem/index.php/course/create
+---
+2014/05/08 10:29:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "img".' in E:\Copy\workspace\www\YiiFramework\framework\web\CController.php:483
+Stack trace:
+#0 E:\Copy\workspace\www\YiiFramework\framework\web\CController.php(270): CController->missingAction('img')
+#1 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(282): CController->run('img')
+#2 E:\Copy\workspace\www\YiiFramework\framework\web\CWebApplication.php(141): CWebApplication->runController('course/img/ui-a...')
+#3 E:\Copy\workspace\www\YiiFramework\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#4 E:\Copy\workspace\www\cSystem\index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/csystem/index.php/course/img/ui-anim_basic_16x16.gif
+HTTP_REFERER=http://127.0.0.1/csystem/index.php/course/create
+---

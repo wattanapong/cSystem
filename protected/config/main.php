@@ -61,7 +61,7 @@ return array(
 		// uncomment the following to use a MySQL database
 
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=csystem',
+			'connectionString' => 'mysql:host=127.0.0.1;dbname=csystem',
 			'emulatePrepare' => true,
 			'username' => 'csystem',
 			'password' => 'csystem1234',

@@ -23,6 +23,9 @@ ul.ui-autocomplete {
 
 $cs->registerScript('js',"
 	$('#Course_code').bind('keyup', function(e) { 
+		$('#Course_id').val('');
+		$('#Course_valueTh').val('');
+		$('#Course_valueEn').val('');
 		$('#Course_valueTh').prop('disabled', false);
 		$('#Course_valueEn').prop('disabled', false);
 	});

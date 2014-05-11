@@ -6,9 +6,13 @@
 	<meta name="language" content="en" />
 
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" />
 	<style>
 		.navbar .navbar-inner .container {
 			width:100%;
+		}
+		.portlet-content ul> li{
+			border-bottom: 1px solid #00A;
 		}
 	</style>
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>

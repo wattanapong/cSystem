@@ -1,12 +1,13 @@
 <?php 
-$name = "555 myname is what 111";
-$n = preg_replace("/what|myname|\s/", "", $name);
-echo $n;
-echo "<br>";
-
-$header = ["username","code","prefix","name","surname","facebook","privilege","major"];
-$f = array_search("major",$header);
-if ( is_numeric($f) ) echo "found ";
-
-
+$return = array();
+array_push($return,array('label'=>'เพิ่มข้อมูลสำเร็จ','id'=>1,'value'=>'test'));
+$js = json_encode($return);
+echo $js."<br>";
 ?>
+<script>
+	var jav = <?php echo $js;?>;
+	var obj = eval(jav);
+	alert(obj[0].label);
+	alert(obj[0].id);
+	alert(obj[0].value);
+</script>

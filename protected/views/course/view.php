@@ -5,11 +5,11 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-array('label'=>'List Course','url'=>array('index')),
-array('label'=>'Create Course','url'=>array('create')),
-array('label'=>'Update Course','url'=>array('update','id'=>$model->id)),
-array('label'=>'Delete Course','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-array('label'=>'Manage Course','url'=>array('admin')),
+			array('label'=>'เพิ่มรายวิชาใหม่','url'=>array('create')),
+			array('label'=>'แก้ไขรายวิชานี้','url'=>array('update','id'=>$model->id)),
+			array('label'=>'จัดการรายวิชาใหม่','url'=>array('admin')),
+			array('label'=>'เพิ่มรายวิชาสำหรับภาคการศึกษา','url'=>array(Yii::app()->baseUrl.'/../courseonsemester/create')),
+			array('label'=>'จัดการรายวิชาสำหรับภาคการศึกษา','url'=>array(Yii::app()->baseUrl.'/../courseonsemester/admin')),
 );
 ?>
 
@@ -22,7 +22,5 @@ array('label'=>'Manage Course','url'=>array('admin')),
 		'code',
 		'valueTh',
 		'valueEn',
-		'semester_id',
-		'yeared_id',
 ),
 )); ?>

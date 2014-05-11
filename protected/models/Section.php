@@ -10,6 +10,7 @@
  */
 class Section extends CActiveRecord
 {
+	public $courseon,$courseonSemester_id,$courseonYeared_id,$teacher,$student,$empty;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -26,11 +27,15 @@ class Section extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('course_id', 'required'),
-			array('value, course_id', 'numerical', 'integerOnly'=>true),
+			array('value,courseonSemester_id', 'required'),
+			array('value, courseonSemester_id', 'ECompositeUniqueValidator',
+					'attributesToAddError'=>'value',
+					'message'=>'{attr_value} {value_value}'.
+					'ในภาคการศึกษานี้มีอยู่แล้ว'),
+			array('value, courseonSemester_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, value, course_id', 'safe', 'on'=>'search'),
+			array('id, value, courseonSemester_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -42,6 +47,10 @@ class Section extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'courseonsemester'=>array(self::BELONGS_TO, 'courseonsemester', 'courseonSemester_id'),
+				'course'=>array(self::BELONGS_TO,'course',array('course_id'=>'id'),'through'=>'courseonsemester'),
+				'semester'=>array(self::BELONGS_TO,'semester',array('semester_id'=>'id'),'through'=>'courseonsemester'),
+				'yeared'=>array(self::BELONGS_TO,'yeared',array('yeared_id'=>'id'),'through'=>'courseonsemester'),
 		);
 	}
 
@@ -53,7 +62,12 @@ class Section extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'value' => 'หมู่เรียนที่',
-			'course_id' => 'รหัสวิชา',
+			'courseon'=>'รายวิชา',
+			'courseonSemester_id' => 'ภาคการศึกษา',
+			'courseonYeared_id'=>'ปีการศึกษา',
+			'teacher'=>'ผู้สอนทั้งหมด',
+			'student'=>'นักเรียนทั้งหมด',
+			'empty'=>'',
 		);
 	}
 

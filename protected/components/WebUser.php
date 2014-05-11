@@ -23,6 +23,11 @@ class WebUser extends CWebUser {
   	}else return null;
   	return $privilege->value;  
   }
+  
+  function getPrivilegeId($pVal){
+  		$privilege = Privilege::model()->find(' value = \''.$pVal.'\' ');
+  	return $privilege->id;
+  }
  
   // This is a function that checks the field 'role'
   // in the User model to be equal to 1, that means it's admin

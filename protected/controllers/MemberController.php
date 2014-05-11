@@ -35,7 +35,7 @@ array('allow', // allow authenticated user to perform 'create' and 'update' acti
 'users'=>array('@'),
 ),
 array('allow', // allow admin user to perform 'admin' and 'delete' actions
-'actions'=>array('admin','delete','activate'),
+'actions'=>array('admin','delete','activate','selectUser'),
 'users'=>array('@'),
 'expression'=>' isset( $user ) && ( $user->getPrivilege() !== "student" ) '
 ),
@@ -296,6 +296,47 @@ $model->attributes=$_GET['Member'];
 $this->render('admin',array(
 'model'=>$model,
 ));
+}
+
+public function actionSelectUser()
+{
+	$msg = "";
+	$model=new Member('searchSelectUser');
+	$model->unsetAttributes();  // clear any default values
+	if(isset($_GET['Member'])){
+		$model->attributes=$_GET['Member'];
+	}
+	
+	if ( isset($_POST['mid']) && isset($_POST['sid']) && isset($_POST['opt'])){
+		$_msg = $_POST['opt'] == "add"?"เพิ่ม": ($_POST['opt'] == "del"?"ลบ":"");
+		if ($_POST['opt'] == "add"  ) {
+			$connection=Yii::app()->db;
+			$command=$connection->createCommand("ALTER TABLE `member_has_section` AUTO_INCREMENT = 1");
+			$command->execute();
+		}
+		$i = 0;
+		 if( is_array($_POST['mid'])){
+			foreach($_POST['mid'] as $_mid){
+				 if ($_POST['opt'] == "add"  ){
+				 	$ms = new MemberHasSection;
+					$ms->unsetAttributes();
+					$ms->attributes = array('member_id'=>$_mid,'section_id'=>$_POST['sid']);
+					if ($ms->save() ) $i++;
+				}
+				elseif ($_POST['opt'] == "del" ){
+					if (MemberHasSection::model()->deleteAll(' member_id = \''.$_mid.'\' AND section_id =\''.$_POST['sid'].'\'   '))
+						$i++;
+				} 
+			}
+		} 
+		
+		die($i>0?$_msg."สมาชิกแล้ว":"ไม่สามารถ".$_msg."ได้ ");
+	}
+	
+	$this->render('selectUser',array(
+			'model'=>$model,
+			'msg'=>$msg,
+	));
 }
 
 public function actionActivate()

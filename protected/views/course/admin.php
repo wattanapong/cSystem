@@ -1,12 +1,20 @@
 <?php
+$cs = Yii::app()->getClientScript();
+$cs->registerCss('tabcss','
+.items th,.items th a {
+	background-color:#0A0;
+		color:#00F;
+}
+');
 $this->breadcrumbs=array(
 	'Courses'=>array('index'),
 	'Manage',
 );
 
 $this->menu=array(
-array('label'=>'List Course','url'=>array('index')),
-array('label'=>'Create Course','url'=>array('create')),
+array('label'=>'เพิ่มรายวิชาใหม่','url'=>array('create')),
+array('label'=>'เพิ่มรายวิชาสำหรับภาคการศึกษา','url'=>array(Yii::app()->baseUrl.'/../courseonsemester/create')),
+array('label'=>'จัดการรายวิชาสำหรับภาคการศึกษา','url'=>array(Yii::app()->baseUrl.'/../courseonsemester/admin')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -23,7 +31,7 @@ return false;
 ");
 ?>
 
-<h1>Manage Courses</h1>
+<h1>จัดการรายวิชา</h1>
 
 <p>
 	You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
@@ -42,10 +50,14 @@ return false;
 
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 'id'=>'course-grid',
+'type'=>'striped bordered condensed',
 'dataProvider'=>$model->search(),
 'filter'=>$model,
 'columns'=>array(
-		'id',
+		array('header'=>'No.',
+					'value'=>'++$row',//'++$row',
+					'htmlOptions'=>array('style'=>'width:20px;'),
+			),
 		'code',
 		'valueTh',
 		'valueEn',

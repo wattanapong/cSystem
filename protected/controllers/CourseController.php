@@ -58,34 +58,23 @@ $this->render('view',array(
 */
 public function actionCreate() {
 		$model = new Course ();
-		$modelCS = new Courseonsemester ();
-		$modely = new Yeared ();
 		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		
-		if (isset ( $_POST ['Course[id]'] ) && 
-		isset ( $_POST ['Courseonsemester[semester_id]'] ) && 
-		isset ( $_POST ['Courseonsemester[yeared_id]'] )) {
-			
-			$modelCS->attributes = array( $_POST ['Course[id]'],
-			$_POST ['Courseonsemester[semester_id]'],
-			$_POST ['Courseonsemester[yeared_id]'] );
-			
-			if ($modelCS->save ())
-				$this->redirect ( array (
-						'view',
-						'id' => $model->id ,
-						'model' => $model,
-						'modelCS' => $modelCS,
-						'modely' => $modely
-				) );
+		if (isset($_POST['Course'])){
+			$model->attributes = $_POST ['Course'] ;
+
+			if ( $model->save() ) {
+					$this->redirect ( array (
+							'view',
+							'id' => $model->id
+					) );
+			}
 		}
 		
 		$this->render ( 'create', array (
 				'model' => $model,
-				'modelCS' => $modelCS,
-				'modely' => $modely 
 		) );
 	}
 
@@ -107,7 +96,6 @@ public function actionAjax()
 	{
 		$model->attributes=$_POST['Yeared'];
 		if( $model->save() ) die("เพิ่มข้อมูลสำเร็จ");
-		else die("ไม่สามารถเพิ่มปีการศึกษาได้ กรุณาลองใหม่");
 	}else throw new CHttpException(404,'The requested page does not exist.');
 	//$this->render('Graduate',array('model'=>$model));
 
@@ -135,6 +123,8 @@ public function actionAutocomplete()
 public function actionUpdate($id)
 {
 $model=$this->loadModel($id);
+$modelCS = new Courseonsemester ();
+$modely = new Yeared ();
 
 // Uncomment the following line if AJAX validation is needed
 // $this->performAjaxValidation($model);
@@ -147,7 +137,9 @@ $this->redirect(array('view','id'=>$model->id));
 }
 
 $this->render('update',array(
-'model'=>$model,
+		'model' => $model,
+		'modelCS' => $modelCS,
+		'modely' => $modely
 ));
 }
 

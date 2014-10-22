@@ -15,8 +15,10 @@
 	
 	<?php echo $form->textFieldRow($model,'fuser',array('class'=>'span5','maxlength'=>100)); ?>
 
-	<?php echo $form->dropDownListRow($model,'prefix_id',CHtml::listData(Prefix::model()->findAll(),'id','valueTh'),array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'prefix_id',CHtml::listData(Prefix::model()->findAll(),'id','valueTh'),array('onChange'=>'changeGender()', 'class'=>'span5')); ?>
 
+	<?php echo $form->dropDownListRow($model,'gender_id',CHtml::listData(Gender::model()->findAll(),'id','valueTh'),array('class'=>'span5',"disabled"=>"disabled")); ?>
+	
 	<?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>45)); ?>
 
 	<?php echo $form->textFieldRow($model,'surname',array('class'=>'span5','maxlength'=>45)); ?>
@@ -86,3 +88,13 @@ else $privileges = Privilege::model()->findAll();
 
 <?php $this->endWidget(); ?>
 
+<script>
+function changeGender(){
+	var p = $('#Member_prefix_id option:selected').text();
+	if (p == "นาย" || p=="Mr." )  
+		$('#Member_gender_id option').filter(function () { return $(this).html() =="ชาย" || $(this).html() =="male"; }).prop('selected', true);
+	else
+		$('#Member_gender_id option').filter(function () { return $(this).html() =="หญิง" || $(this).html() =="female"; }).prop('selected', true);
+	
+}
+</script>

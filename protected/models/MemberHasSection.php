@@ -27,6 +27,10 @@ class MemberHasSection extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('member_id, section_id', 'required'),
+			array('member_id, section_id', 'ECompositeUniqueValidator',
+					'attributesToAddError'=>'member_id',
+					'message'=>'{attr_member_id} '.
+					'{attr_section_id}  มีอยู่แล้ว'),
 			array('member_id, section_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

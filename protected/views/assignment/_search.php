@@ -1,55 +1,48 @@
-<?php
-/* @var $this AssignmentController */
-/* @var $model Assignment */
-/* @var $form CActiveForm */
-?>
-
-<div class="wide form">
-
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'action'=>Yii::app()->createUrl($this->route),
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+	'action'=>Yii::app()->createUrl("/assignment/select"),
 	'method'=>'get',
 )); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'id'); ?>
-		<?php echo $form->textField($model,'id'); ?>
-	</div>
+		<?php echo $form->textFieldRow($model,'id',array('class'=>'span5')); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'topic'); ?>
-		<?php echo $form->textField($model,'topic',array('size'=>60,'maxlength'=>100)); ?>
-	</div>
+		<?php echo $form->textFieldRow($model,'topic',array('class'=>'span5','maxlength'=>100)); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'pdf'); ?>
-		<?php echo $form->textField($model,'pdf',array('size'=>60,'maxlength'=>100)); ?>
-	</div>
+		<?php echo $form->textFieldRow($model,'pdf',array('class'=>'span5','maxlength'=>100)); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'start'); ?>
-		<?php echo $form->textField($model,'start'); ?>
-	</div>
+		<?php echo $form->dropDownListRow($model,'category_id',array('empty'=>'')+CHtml::listdata( Category::model()->findAll(),'id','name'),array('class'=>'span5')); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'end'); ?>
-		<?php echo $form->textField($model,'end'); ?>
-	</div>
+		<?php 
+	$form->widget(
+			'ext.jui.EJuiDateTimePicker',
+			array(
+					'model'     => $model,
+					'attribute' => 'created',
+					'mode'    => 'datetime',
+					'language'=> 'th',
+					'htmlOptions'=>array(
+							'class'=>'span5',
+							'id' => 'search_created',
+							'size' => '10',
+							'value' => convertDate($model->created),
+							'width'=>'120px',
+					),
+					'options'=>array(
+							'showOn'=>'button',
+							'buttonImage' => Yii::app ()->request->baseUrl . '/images/icon/calendar.png',
+							'dateFormat'=> 'd MM yy',
+							'changeMonth'=>'true',
+							'changeYear'=>'true',
+							'defaultDate'=>'+543y',
+					),
+		 )
+	 ); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'create'); ?>
-		<?php echo $form->textField($model,'create'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'member_has_section_id'); ?>
-		<?php echo $form->textField($model,'member_has_section_id'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Search'); ?>
+	<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType' => 'submit',
+			'type'=>'primary',
+			'label'=>'Search',
+		)); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
-
-</div><!-- search-form -->

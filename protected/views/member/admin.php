@@ -145,10 +145,11 @@ foreach($privileges as $p){ ?>
 				'name'=>'username',
 				'htmlOptions'=>array('style'=>'width:120px;'),
 		),
+		
 		array(
-				'name'=>'prefix_id',
-				'value'=> ' Prefix::model()->findByPk($data->prefix_id)->valueTh',
-				'filter'=>CHtml::listData(Prefix::model()->findAll(),'id','valueTh'),
+				'name'=>'gender_id',
+				'value'=> ' Gender::model()->findByPk($data->gender_id)->valueTh',
+				'filter'=>CHtml::listData(Gender::model()->findAll(),'id','valueTh'),
 				'htmlOptions'=>array('style'=>'width:60px;'),
 		),
 		

@@ -35,7 +35,7 @@ array('allow', // allow authenticated user to perform 'create' and 'update' acti
 'users'=>array('@'),
 ),
 array('allow', // allow admin user to perform 'admin' and 'delete' actions
-'actions'=>array('admin','delete','activate'),
+'actions'=>array('admin','delete','activate','selectUser','editor'),
 'users'=>array('@'),
 'expression'=>' isset( $user ) && ( $user->getPrivilege() !== "student" ) '
 ),
@@ -144,18 +144,19 @@ private function insertMembers($file){
 		//read header
 		if (($buffer = fgets($fp, 4096)) !== false ) {
 		$line = explode(",",$buffer);
+		//$line = array_map("trim",$line);
 			if ( !in_array("username", $line) && !in_array("code", $line) ) 
-				$msg[] = array('failed'=>"ต้องกำหนด username หรือรหัสนิสิต โดยใช้หัวข้อ csv เป็น username หรือ code ตามลำดับ");
-			elseif ( !in_array("name", $line) ) $msg[] = array('failed'=>"ต้องกำหนดชื่อ โดยใช้หัวข้อ csv เป็น name");
+				$msg[] = array('failed'=>"ต้องกำหนด username หรือรหัสนิสิต โดยใช้หัวข้อเป็น username หรือ code ตามลำดับ");
+			elseif ( !in_array("name", $line) ) $msg[] = array('failed'=>"ต้องกำหนดชื่อ โดยใช้หัวข้อเป็น name");
 			
 			else {
 				foreach($line as $l){
-					$no = array_search(trim($l), $header);
-					if (false === $no ) {
-						$msg[] = array('failed'=>"หัวข้อ ".$l." ไม่มีในข้อกำหนด");
+					$no = array_keys(array_keys($header),$l);
+					if ( sizeof($no) == 0 ) {
+						$msg[] = array('failed'=>"หัวข้อ ".$l." ไม่มีในข้อกำหนด ");
 						break;
 					}else{
-						$key[] = $header[$no];
+						$key[] = $l;
 					}
 				}
 			}
@@ -173,8 +174,9 @@ private function insertMembers($file){
 				if ( isset($line['prefix_id'] ) && !is_numeric($line['prefix_id']) )  $line['prefix_id'] = 1;
 				else $line['prefix_id'] = 1;
 					
-				if ( isset($line['privilege_id'] ) &&  $line['privilege_id'] !=2 && $line['privilege_id'] != 3 )  $line['privilege_id'] = 3;
-				else $line['privilege_id'] = 3;
+			/* 	if ( isset($line['privilege_id'] ) &&  $line['privilege_id'] !=2 && $line['privilege_id'] != 3 )  $line['privilege_id'] = 3;
+				else $line['privilege_id'] = 3; */
+				$line['privilege_id'] = 3;
 					
 				if ( isset($line['major_id'] ) && !is_numeric($line['major_id']) )  $line['major_id'] = 1;
 				else $line['major_id'] = 1;
@@ -283,6 +285,16 @@ $this->render('index',array(
 ));
 }
 
+public function actionEditor()
+{
+	$model = new Member();
+	$dataProvider=new CActiveDataProvider('Member');
+	$this->render('editor',array(
+			'dataProvider'=>$dataProvider,
+			'model'=>$model,
+	));
+}
+
 /**
 * Manages all models.
 */
@@ -296,6 +308,47 @@ $model->attributes=$_GET['Member'];
 $this->render('admin',array(
 'model'=>$model,
 ));
+}
+
+public function actionSelectUser()
+{
+	$msg = "";
+	$model=new Member('searchSelectUser');
+	$model->unsetAttributes();  // clear any default values
+	if(isset($_GET['Member'])){
+		$model->attributes=$_GET['Member'];
+	}
+	
+	if ( isset($_POST['mid']) && isset($_POST['sid']) && isset($_POST['opt'])){
+		$_msg = $_POST['opt'] == "add"?"เพิ่ม": ($_POST['opt'] == "del"?"ลบ":"");
+		if ($_POST['opt'] == "add"  ) {
+			$connection=Yii::app()->db;
+			$command=$connection->createCommand("ALTER TABLE `member_has_section` AUTO_INCREMENT = 1");
+			$command->execute();
+		}
+		$i = 0;
+		 if( is_array($_POST['mid'])){
+			foreach($_POST['mid'] as $_mid){
+				 if ($_POST['opt'] == "add"  ){
+				 	$ms = new MemberHasSection;
+					$ms->unsetAttributes();
+					$ms->attributes = array('member_id'=>$_mid,'section_id'=>$_POST['sid']);
+					if ($ms->save() ) $i++;
+				}
+				elseif ($_POST['opt'] == "del" ){
+					if (MemberHasSection::model()->deleteAll(' member_id = \''.$_mid.'\' AND section_id =\''.$_POST['sid'].'\'   '))
+						$i++;
+				} 
+			}
+		} 
+		
+		die($i>0?$_msg."สมาชิกแล้ว":"ไม่สามารถ".$_msg."ได้ ");
+	}
+	
+	$this->render('selectUser',array(
+			'model'=>$model,
+			'msg'=>$msg,
+	));
 }
 
 public function actionActivate()
@@ -357,4 +410,13 @@ Yii::app()->end();
 }
 }
 
+
+public function getAcademicYear(){
+	echo "<select name=\"year\">";
+	for ($i = 0; $i < 8; $i++) {
+		echo "<option value=\"".$i."\">".$i."</option>";
+	}
+	
+	echo "</select>";
+}
 }

@@ -22,7 +22,8 @@ class Member extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public $password1,$password2,$checkList,$memberlist,$major_id,$faculty_id,$university_id;
+	public $password1,$password2,$checkList,$memberlist,$major_id,$faculty_id,$university_id,$academic_rank,$year,$gender;
+	private $fullName;
 	public function tableName()
 	{
 		return 'member';
@@ -41,13 +42,14 @@ class Member extends CActiveRecord
 			array('name, surname', 'required','on'=>'update'),
 			array('username,code','unique', 'attributes' => array('username', 'code'), 'message'=>' {attribute} มีอยู่แล้ว'),
 			array('password1', 'compare', 'compareAttribute'=>'password2', 'on'=>'update', 'message'=>' {attribute}และ{compareAttribute}   ต้องเหมือนกัน'),
-			array('prefix_id, academic_rank_id, status, privilege_id, phd', 'numerical', 'integerOnly'=>true),
+			array('prefix_id, academic_rank_id, status, privilege_id, phd,gender_id', 'numerical', 'integerOnly'=>true),
 			array('username, password, name, surname', 'length', 'max'=>45),
 			array('fuser', 'length', 'max'=>100),
 			array('date_registered,password1,password2,memberlist,major_id,faculty_id,university_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, username, password, fuser, prefix_id, name, surname,code, academic_rank_id, date_registered, status, privilege_id, phd,major_id,faculty_id', 'safe', 'on'=>'search'),
+			array('id, username, password, fuser, prefix_id, gender_id,year,name, surname,code, academic_rank_id, 
+					date_registered, status, privilege_id, phd,major_id,faculty_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,9 +62,12 @@ class Member extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 				'prefix'=>array(self::BELONGS_TO, 'prefix', 'prefix_id'),
+				'gender'=>array(self::BELONGS_TO, 'gender', 'gender_id'),
 				'privilege'=>array(self::BELONGS_TO, 'privilege', 'privilege_id'),
 				'major'=>array(self::BELONGS_TO,'major','major_id'),
 				'faculty'=>array(self::BELONGS_TO,'faculty',array('faculty_id'=>'id'),'through'=>'major'),
+				'academic_rank'=>array(self::BELONGS_TO, 'academic_rank', 'academic_rank_id'),
+				'ms'=>array(self::MANY_MANY, 'section','member_has_section(member_id,section_id)'),
 		);
 	}
 
@@ -79,9 +84,11 @@ class Member extends CActiveRecord
 				'password2' => 'ยืนยันรหัสผ่าน',
 			'fuser' => 'เฟซบุ๊คลิงค์',
 			'prefix_id' => 'คำนำหน้า',
+				'gender_id'=>'เพศ',
 			'name' => 'ชื่อ',
 			'surname' => 'นามสกุล',
 			'code'=>'รหัสนิสิต(นักศึกษา)',
+				'year'=>'ชั้นปี',
 			'academic_rank_id' => 'ตำแหน่งวิชาการ',
 			'date_registered' => 'วันสมัครสมาชิก',
 			'status' => 'สถานะสมาชิก',
@@ -91,6 +98,7 @@ class Member extends CActiveRecord
 			'major_id'=>'ภาควิชา(สาขาวิชา)',
 			'faculty_id'=>'คณะ',
 			'university_id'=>'มหาวิทยาลัย',
+			'fullName'=>'ชื่อ นามสกุล',
 		);
 	}
 
@@ -116,24 +124,68 @@ class Member extends CActiveRecord
 		if ($opt == "activated" ) $cond = " t.status = 0 ";
 		if ( $pid != 0 && !is_array($pid)) $cond .= (($cond == '')?'':' AND ').'t.privilege_id = '.$pid;
 		elseif( is_array($pid) ) foreach($pid as $p_id) $cond .= (($cond == '')?'':' AND ').'t.privilege_id = '.$p_id.' ';
-		$criteria->addCondition(array($cond));
+		if (!empty($cond) ) $criteria->addCondition(array($cond));
 		
-		$criteria->compare('id',$this->id);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('fuser',$this->fuser,true);
-		$criteria->compare('prefix_id',$this->prefix_id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('surname',$this->surname,true);
-		$criteria->compare('code',$this->code,true);
-		$criteria->compare('academic_rank_id',$this->academic_rank_id);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.username',$this->username,true);
+		$criteria->compare('t.password',$this->password,true);
+		$criteria->compare('t.fuser',$this->fuser,true);
+		$criteria->compare('t.prefix_id',$this->prefix_id);
+		$criteria->compare('t.gender_id',$this->gender_id);
+		$criteria->compare('t.name',$this->name,true);
+		$criteria->compare('t.surname',$this->surname,true);
+		$criteria->compare('t.code',$this->code,true);
+		if (!empty($this->year)) $criteria->compare('t.code',(Yii::app()->params['yearNow']%100+$this->year-1)."%",true,"AND",false);
+		$criteria->compare('t.academic_rank_id',$this->academic_rank_id);
 		$criteria->compare('t.date_registered','>='.Date2Sql( $this->date_registered ));
-		$criteria->compare('status',$this->status);
-		$criteria->compare('privilege_id',$this->privilege_id);
-		$criteria->compare('phd',$this->phd);
+		$criteria->compare('t.status',$this->status);
+		$criteria->compare('t.privilege_id',$this->privilege_id);
+		$criteria->compare('t.phd',$this->phd);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+		));
+	}
+	
+	public function searchSelectUser($pid=0,$opt,$secid,$sec,$pagination,$members=array())
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+		$criteria=new CDbCriteria;
+		$criteria->with = array( 'ms' );
+		$criteria->together = true;
+		if ($sec) $criteria->order = ('ms_ms.id DESC');
+		else  $criteria->order = ('t.id DESC');
+		//$criteria->group = ('t.username');
+	
+		$cond = "";
+		if ($opt == "hasCode" ) $cond = " t.code != '' ";
+		if ( !empty($secid) ){
+			if ($sec) $cond .= (($cond == '')?'':' AND ').' ms.id = '.$secid;
+		}
+		if ( $pid != 0 && !is_array($pid)) $cond .= (($cond == '')?'':' AND ').'ms.id = '.$pid;
+		elseif( is_array($pid) ) foreach($pid as $p_id) $cond .= (($cond == '')?'':' AND ').'t.privilege_id = '.$p_id.' ';
+		if (!empty($cond) ){
+			if ( count($members)>0 ) $criteria->addNotInCondition('t.id',$members);
+			$criteria->addCondition(array($cond));
+		}
+	
+		$criteria->compare('t.username',$this->username,true);
+		$criteria->compare('t.gender_id',$this->gender_id);
+		if (!empty($this->year)) $criteria->compare('t.code',((Yii::app()->params['yearNow']) % 100 - $this->year +1)."%",true,"AND",false);
+		/*$criteria->compare('t.code',$this->code,true);
+		$criteria->compare('t.academic_rank_id',$this->academic_rank_id);
+		$criteria->compare('t.phd',$this->phd);*/
+	
+		$criteria2=new CDbCriteria;
+		$criteria2->compare('t.name',$this->name,true);
+		$criteria2->compare('t.surname',$this->name,true,'OR');
+		
+		
+		$criteria->mergeWith($criteria2, 'AND');
+		
+		return new CActiveDataProvider($this, array(
+				'criteria'=>$criteria,
+				 'pagination'=>$pagination,
 		));
 	}
 
@@ -146,6 +198,20 @@ class Member extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	
+	public function getFullName(){
+		$pre = '';
+
+		 if ( Yii::app()->user->getPrivilegeId('teacher') == $this->privilege_id ){
+		$pre = (isset($this->academic_rank->valueTh)?$this->academic_rank->valueTh:"").$this->phd?"ดร.":"";
+		$pre = empty($pre)?$this->prefix->valueTh:$pre;
+			return $this->name.' '.$this->surname;
+		}elseif ( Yii::app()->user->getPrivilegeId('student') == $this->privilege_id){
+		//$pre = $this->code."  ";//.$this->prefix->valueTh;
+			return $this->name.' '.$this->surname;
+		}  
+		 
 	}
 	
 }

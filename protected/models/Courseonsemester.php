@@ -11,6 +11,7 @@
  */
 class Courseonsemester extends CActiveRecord
 {
+	public $section;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -28,6 +29,12 @@ class Courseonsemester extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('course_id, semester_id, yeared_id', 'required'),
+			array('course_id, semester_id,yeared_id', 'ECompositeUniqueValidator',
+					'attributesToAddError'=>'course_id',
+					'message'=>'{attr_course_id} '.
+					'{attr_semester_id} '.
+					'{attr_yeared_id}  มีอยู่แล้ว'),
+				
 			array('course_id, semester_id, yeared_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -43,6 +50,9 @@ class Courseonsemester extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'course'=>array(self::BELONGS_TO, 'course', 'course_id'),
+				'semester'=>array(self::BELONGS_TO, 'semester', 'semester_id'),
+				'yeared'=>array(self::BELONGS_TO, 'yeared', 'yeared_id'),
 		);
 	}
 
@@ -54,8 +64,11 @@ class Courseonsemester extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'course_id' => 'วิชา',
+			'course' => 'วิชา',
 			'semester_id' => 'ภาคการศึกษา',
 			'yeared_id' => 'ปีการศึกษา(พ.ศ.)',
+			'section'=>'หมู่เรียน',
+			'adddelsection'=>'เพิ่ม ลบ หมู่เรียน'
 		);
 	}
 

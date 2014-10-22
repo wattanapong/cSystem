@@ -27,13 +27,10 @@ class SectionController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('index','view','create','update','addAjax','delAjax'),
 				'users'=>array('@'),
+				'expression'=>'( Yii::app()->user->isTeacher()  || Yii::app()->user->isAdmin()  )',
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
@@ -51,9 +48,52 @@ class SectionController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$modelM = new Member('search');
+		$modelM->unsetAttributes();  // clear any default values
+		if(isset($_GET['Member']))
+			$modelM->attributes=$_GET['Member'];
+		
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+			'modelM'=>$modelM,
+			'modelAiS'=>new AssignmentInSection,
+			'modelA'=>new Assignment,
 		));
+	}
+	
+	
+	public function actionAddAjax()
+	{
+		$model=new Section;
+		$return = array();
+		if( isset($_POST['Section']) )
+		{
+			$model->attributes=$_POST['Section'];
+			if( $model->save() ){
+				array_push($return,array('msg'=>'เพิ่มข้อมูลสำเร็จ','id'=>$model->id,'value'=>$model->value));
+				die(json_encode($return));
+			}
+				// die("เพิ่มข้อมูลสำเร็จ");
+		}else throw new CHttpException(404,'The requested page does not exist.');
+		//$this->render('Graduate',array('model'=>$model));
+	
+	}
+	
+	public function actionDelAjax()
+	{
+		$return = array('msg'=>'ลบข้อมูลสำเร็จ');
+		if( isset($_POST['Courseonsemester']) )
+		{
+			$section =$_POST['Courseonsemester']['section'];
+			foreach($section as  $v ){
+				$this->loadModel($v)->delete();
+				array_push($return,array('id'=>$v));
+			}
+			die(json_encode($return));
+			
+		}else throw new CHttpException(404,'The requested page does not exist.');
+		//$this->render('Graduate',array('model'=>$model));
+	
 	}
 
 	/**

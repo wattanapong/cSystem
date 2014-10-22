@@ -18,6 +18,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'ext.ECompositeUniqueValidator',
 	),
 
 	'modules'=>array(
@@ -94,5 +95,6 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'wattanapong.su@outlook.com',
+			'yearNow'=>2557,
 	),
 );

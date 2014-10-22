@@ -34,6 +34,7 @@ class CourseonsemesterController extends Controller
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
+				'expression'=>'( !Yii::app()->user->isStudent() )',
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
@@ -51,8 +52,10 @@ class CourseonsemesterController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$models = new Section();
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+			'models'=>$models,
 		));
 	}
 
@@ -63,6 +66,8 @@ class CourseonsemesterController extends Controller
 	public function actionCreate()
 	{
 		$model=new Courseonsemester;
+		$modelc = new Course();
+		$modely = new Yeared();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -70,12 +75,18 @@ class CourseonsemesterController extends Controller
 		if(isset($_POST['Courseonsemester']))
 		{
 			$model->attributes=$_POST['Courseonsemester'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				
+			if ($model->save ())
+				$this->redirect ( array (
+						'view',
+						'id' => $model->id
+				) );
 		}
 
 		$this->render('create',array(
-			'model'=>$model,
+				'model'=>$model,
+				'modelc'=>$modelc,
+				'modely'=>$modely,
 		));
 	}
 
@@ -87,6 +98,8 @@ class CourseonsemesterController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+		$modelc = new Course();
+		$modely = new Yeared();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -99,7 +112,9 @@ class CourseonsemesterController extends Controller
 		}
 
 		$this->render('update',array(
-			'model'=>$model,
+				'model'=>$model,
+				'modelc'=>$modelc,
+				'modely'=>$modely,
 		));
 	}
 

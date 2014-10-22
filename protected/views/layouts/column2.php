@@ -3,12 +3,11 @@
 <div class="span2">
 	<?php
 		$this->beginWidget('zii.widgets.CPortlet', array(
-			'title'=>'Operations',
+			'title'=>'เมนู',		
 		));
 		$this->widget('bootstrap.widgets.TbMenu', array(
 			'items'=>$this->menu,
 			'type'=>'list',
-			'htmlOptions'=>array('class'=>'operations'),
 		));
 		$this->endWidget();
 	?>

@@ -12,6 +12,7 @@
  */
 class Course extends CActiveRecord
 {
+	public $yeared_id,$semester_id;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -29,8 +30,13 @@ class Course extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('code,valueTh,valueEn', 'required'),
-			array('yearEd_id', 'numerical', 'integerOnly'=>true),
+			//array('yearEd_id', 'numerical', 'integerOnly'=>true),
 			array('code', 'length', 'max'=>10),
+			array('code,valueTh,valueEn', 'filter', 'filter'=>'trim'),
+			array('code', 'ECompositeUniqueValidator',
+					'attributesToAddError'=>'code',
+					'message'=>' {value_code}  มีอยู่แล้ว'),
+			array('code','unique', 'attributes' => array('code'), 'message'=>' {attribute} มีอยู่แล้ว'),
 			array('valueTh, valueEn', 'length', 'max'=>70),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -62,6 +68,8 @@ class Course extends CActiveRecord
 			'code' => 'รหัสวิชา',
 			'valueTh' => 'ชื่อคอร์สภาษาไทย',
 			'valueEn' => 'ชื่อคอร์สภาษาอังกฤษ',
+			'yeared_id'=>'ปีการศึกษา',
+			'semester_id'=>'ภาคการศึกษา',
 		);
 	}
 

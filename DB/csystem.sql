@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 4.0.4.2
 -- http://www.phpmyadmin.net
 --
--- โฮสต์: 127.0.0.1
--- เวลาในการสร้าง: 
--- เวอร์ชั่นของเซิร์ฟเวอร์: 5.5.32
--- รุ่นของ PHP: 5.4.19
+-- Host: localhost
+-- Generation Time: Oct 13, 2014 at 03:07 AM
+-- Server version: 5.5.32-MariaDB
+-- PHP Version: 5.6.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- ฐานข้อมูล: `csystem`
+-- Database: `csystem`
 --
 CREATE DATABASE IF NOT EXISTS `csystem` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `csystem`;
@@ -25,7 +25,7 @@ USE `csystem`;
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `academic_rank`
+-- Table structure for table `academic_rank`
 --
 
 CREATE TABLE IF NOT EXISTS `academic_rank` (
@@ -33,29 +33,85 @@ CREATE TABLE IF NOT EXISTS `academic_rank` (
   `valueTh` varchar(45) DEFAULT NULL COMMENT 'ชื่อตำแหน่งภาษาไทย',
   `valueEn` varchar(45) DEFAULT NULL COMMENT 'ชื่อตำแหน่งภาษาอังกฤษ',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+
+--
+-- Dumping data for table `academic_rank`
+--
+
+INSERT INTO `academic_rank` (`id`, `valueTh`, `valueEn`) VALUES
+(8, 'ผศ.', 'Assist. Prof.'),
+(9, 'รศ.', 'Assoc. Prof.'),
+(10, 'ศ.', 'Professor');
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `assignment`
+-- Table structure for table `assignment`
 --
 
 CREATE TABLE IF NOT EXISTS `assignment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `topic` varchar(100) DEFAULT NULL COMMENT 'หัวข้อโจทย์',
   `pdf` varchar(100) DEFAULT NULL COMMENT 'โจทย์',
-  `start` datetime DEFAULT NULL COMMENT 'เวลาเริ่มทำโจทย์',
-  `end` datetime DEFAULT NULL COMMENT 'เวลาสิ้นสุดการทำโจทย์',
-  `create` datetime DEFAULT NULL COMMENT 'เวลาสร้างทำโจทย์',
-  `member_has_section_id` int(11) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'เวลาสร้างทำโจทย์',
+  `category_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
+--
+-- Dumping data for table `assignment`
+--
+
+INSERT INTO `assignment` (`id`, `topic`, `pdf`, `created`, `category_id`) VALUES
+(8, 'hello world', '/quiz/4abcd85b097b41dc32dc2df3871f98ff.pdf', '2014-05-24 17:28:47', 1),
+(9, 'แสดงผล ชื่อ นามสกุล', '/quiz/ea42d2987daad1b36b5e275ada3d072d.pdf', '2014-10-12 18:39:29', 1);
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `course`
+-- Table structure for table `assignment_in_section`
+--
+
+CREATE TABLE IF NOT EXISTS `assignment_in_section` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `assignment_id` int(11) DEFAULT NULL,
+  `section` int(11) DEFAULT NULL,
+  `assignment_title` varchar(45) DEFAULT NULL,
+  `start` datetime DEFAULT NULL,
+  `end` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 DELAY_KEY_WRITE=1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+CREATE TABLE IF NOT EXISTS `category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `name`) VALUES
+(1, 'การแสดงผล'),
+(2, 'การรับข้อมูล'),
+(3, 'การเขียนโปรแกรมทางเลือก'),
+(4, 'การเขียนโปรแกรมวนซ้ำ'),
+(5, 'ตัวแปรชุด'),
+(6, 'ตัวแปรชี้ตำแหน่ง'),
+(7, 'ตัวแปรโครงสร้าง');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course`
 --
 
 CREATE TABLE IF NOT EXISTS `course` (
@@ -64,19 +120,21 @@ CREATE TABLE IF NOT EXISTS `course` (
   `valueTh` varchar(70) DEFAULT NULL COMMENT 'ชื่อคอร์สภาษาไทย',
   `valueEn` varchar(70) DEFAULT NULL COMMENT 'ชื่อคอร์สภาษาอังกฤษ',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- dump ตาราง `course`
+-- Dumping data for table `course`
 --
 
 INSERT INTO `course` (`id`, `code`, `valueTh`, `valueEn`) VALUES
-(1, '235012', 'โครงสร้างข้อมูล', 'data structure and algorithm');
+(1, '235012', 'โครงสร้างข้อมูล', 'data structure and algorithm'),
+(2, '227221', 'วิศวกรรมซอฟต์แวร์เชิงวัตถุ', 'Object-Oriented Software Engineering'),
+(3, '235021', 'การเขียนโปรแกรมเชิงโครงสร้าง', 'structure programming');
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `courseonsemester`
+-- Table structure for table `courseonsemester`
 --
 
 CREATE TABLE IF NOT EXISTS `courseonsemester` (
@@ -85,12 +143,21 @@ CREATE TABLE IF NOT EXISTS `courseonsemester` (
   `semester_id` int(11) NOT NULL COMMENT 'ภาคการศึกษา',
   `yeared_id` int(11) NOT NULL COMMENT 'ปีการศึกษา(พ.ศ.)',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 DELAY_KEY_WRITE=1 ROW_FORMAT=FIXED AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `courseonsemester`
+--
+
+INSERT INTO `courseonsemester` (`id`, `course_id`, `semester_id`, `yeared_id`) VALUES
+(1, 1, 1, 5),
+(3, 2, 1, 5),
+(4, 3, 2, 5);
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `email`
+-- Table structure for table `email`
 --
 
 CREATE TABLE IF NOT EXISTS `email` (
@@ -104,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `email` (
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `faculty`
+-- Table structure for table `faculty`
 --
 
 CREATE TABLE IF NOT EXISTS `faculty` (
@@ -117,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `faculty` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- dump ตาราง `faculty`
+-- Dumping data for table `faculty`
 --
 
 INSERT INTO `faculty` (`id`, `valueTh`, `valueEn`, `abb`, `university_id`) VALUES
@@ -126,7 +193,28 @@ INSERT INTO `faculty` (`id`, `valueTh`, `valueEn`, `abb`, `university_id`) VALUE
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `major`
+-- Table structure for table `gender`
+--
+
+CREATE TABLE IF NOT EXISTS `gender` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `valueEn` varchar(10) NOT NULL,
+  `valueTh` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `gender`
+--
+
+INSERT INTO `gender` (`id`, `valueEn`, `valueTh`) VALUES
+(1, 'male', 'ชาย'),
+(2, 'female', 'หญิง');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `major`
 --
 
 CREATE TABLE IF NOT EXISTS `major` (
@@ -139,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `major` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
--- dump ตาราง `major`
+-- Dumping data for table `major`
 --
 
 INSERT INTO `major` (`id`, `valueTh`, `valueEn`, `abb`, `faculty_id`) VALUES
@@ -155,7 +243,7 @@ INSERT INTO `major` (`id`, `valueTh`, `valueEn`, `abb`, `faculty_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `member`
+-- Table structure for table `member`
 --
 
 CREATE TABLE IF NOT EXISTS `member` (
@@ -163,12 +251,13 @@ CREATE TABLE IF NOT EXISTS `member` (
   `username` varchar(45) NOT NULL COMMENT 'ชื่อเข้าใช้',
   `password` varchar(45) NOT NULL COMMENT 'รหัสผ่าน',
   `fuser` varchar(100) DEFAULT NULL,
-  `prefix_id` int(11) DEFAULT NULL COMMENT 'คำนำหน้า',
+  `prefix_id` int(11) DEFAULT '1' COMMENT 'คำนำหน้า',
+  `gender_id` int(11) NOT NULL DEFAULT '1' COMMENT 'เพศ',
   `name` varchar(45) DEFAULT NULL COMMENT 'ชื่อ',
   `surname` varchar(45) DEFAULT NULL COMMENT 'นามสกุล',
   `code` varchar(15) DEFAULT NULL,
   `academic_rank_id` int(11) DEFAULT NULL COMMENT 'ตำแหน่งวิชาการ',
-  `date_registered` datetime DEFAULT NULL COMMENT 'วันสมัครสมาชิก',
+  `date_registered` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'วันสมัครสมาชิก',
   `status` int(1) NOT NULL DEFAULT '0' COMMENT 'สถานะสมาชิก',
   `privilege_id` int(11) NOT NULL DEFAULT '3' COMMENT 'ประเภทสมาชิก',
   `tel` varchar(10) DEFAULT NULL,
@@ -181,49 +270,73 @@ CREATE TABLE IF NOT EXISTS `member` (
   KEY `fk_member_status1_idx` (`status`),
   KEY `fk_member_prefix1_idx` (`prefix_id`),
   KEY `fk_member_privilege1_idx` (`privilege_id`),
-  KEY `fk_member_major1_idx` (`major_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
+  KEY `fk_member_major1_idx` (`major_id`),
+  KEY `gender_id` (`gender_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=56 ;
 
 --
--- dump ตาราง `member`
+-- Dumping data for table `member`
 --
 
-INSERT INTO `member` (`id`, `username`, `password`, `fuser`, `prefix_id`, `name`, `surname`, `code`, `academic_rank_id`, `date_registered`, `status`, `privilege_id`, `tel`, `email`, `phd`, `major_id`) VALUES
-(1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', '', 1, 'วัฒนพงศ์', 'สุทธภักดิ์', NULL, NULL, '2014-03-24 16:52:00', 1, 1, '', '', 0, 2),
-(2, 'wattanapong.su', '81dc9bdb52d04dc20036dbd8313ed055', '', 1, 'วัฒนพงศ์', 'สุทธภักดิ์', NULL, NULL, NULL, 1, 2, '', '', 0, 2),
-(4, 'student', '81dc9bdb52d04dc20036dbd8313ed055', '', 1, '', '', NULL, NULL, NULL, 1, 3, '', '', 0, 2),
-(5, '56022926', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายณัฐพล คตภูธร', NULL, '56022926', NULL, NULL, 1, 3, '', '', 0, 1),
-(6, '56022937', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายณัฐวุฒิ จันทาพูน', NULL, '56022937', NULL, NULL, 1, 3, '', '', 0, 1),
-(7, '56022959', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายธนพล สุขแจ่ม', NULL, '56022959', NULL, NULL, 1, 3, '', '', 0, 1),
-(8, '56022960', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวนิพิษฐา กันทิยะ', NULL, '56022960', NULL, NULL, 1, 3, '', '', 0, 1),
-(9, '56022971', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายปฏิพล ปันยวง', NULL, '56022971', NULL, NULL, 1, 3, '', '', 0, 1),
-(10, '56022982', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายปราโมทย์ พรหมธิ', NULL, '56022982', NULL, NULL, 1, 3, '', '', 0, 1),
-(11, '56022993', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวพรชนก สุรินทร์', NULL, '56022993', NULL, NULL, 1, 3, '', '', 0, 1),
-(12, '56023006', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวพุทธิพัทธ์ มีอ่วม', NULL, '56023006', NULL, NULL, 1, 3, '', '', 0, 1),
-(13, '56023017', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายวัฒชลัช ฐานิศวร์', NULL, '56023017', NULL, NULL, 1, 3, '', '', 0, 1),
-(14, '56023028', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายวันเฉลิม กันทะวงค์', NULL, '56023028', NULL, NULL, 1, 3, '', '', 0, 1),
-(15, '56023039', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายศรัณย์ เชื้อผู้ดี', NULL, '56023039', NULL, NULL, 1, 3, '', '', 0, 1),
-(16, '56023040', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายศุภิสิทธิ์ ไข่กา', NULL, '56023040', NULL, NULL, 1, 3, '', '', 0, 1),
-(17, '56023051', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายสยามรัฐ แก้วตา', NULL, '56023051', NULL, NULL, 1, 3, '', '', 0, 1),
-(18, '56023084', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวหทัยรัตน์ อินงาม', NULL, '56023084', NULL, NULL, 1, 3, '', '', 0, 1),
-(19, '56023095', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายอดิศร บัวผัด', NULL, '56023095', NULL, NULL, 1, 3, '', '', 0, 1),
-(20, '56023129', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวอิษฎา สนิทรำ', NULL, '56023129', NULL, NULL, 1, 3, '', '', 0, 1),
-(21, '56023130', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายเอกชัย บุญเรือง', NULL, '56023130', NULL, NULL, 1, 3, '', '', 0, 1),
-(22, '56023590', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวกรรณิการ์ ทาแกง', NULL, '56023590', NULL, NULL, 1, 3, '', '', 0, 1),
-(23, '56023602', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายกฤษฎา ควบพิมาย', NULL, '56023602', NULL, NULL, 1, 3, '', '', 0, 1),
-(24, '56023613', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายณัฐวัตร ตาเรือนสอน', NULL, '56023613', NULL, NULL, 1, 3, '', '', 0, 1),
-(25, '56023635', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายทัศนัย เคลือบสูงเนิน', NULL, '56023635', NULL, NULL, 1, 3, '', '', 0, 1),
-(26, '56023646', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายยศวรรธน์ สันธิ', NULL, '56023646', NULL, NULL, 1, 3, '', '', 0, 1),
-(27, '56023668', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายอาทิตย์ ถาตุ่ม', NULL, '56023668', NULL, NULL, 1, 3, '', '', 0, 1),
-(28, '56025424', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายพงศกร ไชยปัญญา', NULL, '56025424', NULL, NULL, 1, 3, '', '', 0, 1),
-(29, '56025637', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายธนกร อนะวัชกุล', NULL, '56025637', NULL, NULL, 1, 3, '', '', 0, 1),
-(30, '56025648', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นายวัชรพันธ์ ผัดดี', NULL, '56025648', NULL, NULL, 1, 3, '', '', 0, 1),
-(31, '56025659', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 'นางสาวปราณิสา เก่งการ', NULL, '56025659', NULL, NULL, 1, 3, '', '', 0, 1);
+INSERT INTO `member` (`id`, `username`, `password`, `fuser`, `prefix_id`, `gender_id`, `name`, `surname`, `code`, `academic_rank_id`, `date_registered`, `status`, `privilege_id`, `tel`, `email`, `phd`, `major_id`) VALUES
+(1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', '', 1, 1, 'วัฒนพงศ์', 'สุทธภักดิ์', NULL, NULL, '2014-03-24 09:52:00', 1, 1, '', '', 0, 2),
+(2, 'wattanapong.su', '81dc9bdb52d04dc20036dbd8313ed055', '', 1, 1, 'วัฒนพงศ์', 'สุทธภักดิ์', NULL, NULL, NULL, 1, 2, '', '', 0, 2),
+(4, 'student', '81dc9bdb52d04dc20036dbd8313ed055', '', 1, 1, 'วัฒนพงศ์', 'สุทธภักดิ์', NULL, NULL, NULL, 1, 3, '', '', 0, 2),
+(5, '56022926', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายณัฐพล คตภูธร', NULL, '56022926', NULL, NULL, 1, 3, '', '', 0, 1),
+(6, '56022937', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายณัฐวุฒิ จันทาพูน', NULL, '56022937', NULL, NULL, 1, 3, '', '', 0, 1),
+(7, '56022959', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายธนพล สุขแจ่ม', NULL, '56022959', NULL, NULL, 1, 3, '', '', 0, 1),
+(8, '56022960', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวนิพิษฐา กันทิยะ', NULL, '56022960', NULL, NULL, 1, 3, '', '', 0, 1),
+(9, '56022971', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายปฏิพล ปันยวง', NULL, '56022971', NULL, NULL, 1, 3, '', '', 0, 1),
+(10, '56022982', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายปราโมทย์ พรหมธิ', NULL, '56022982', NULL, NULL, 1, 3, '', '', 0, 1),
+(11, '56022993', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวพรชนก สุรินทร์', NULL, '56022993', NULL, NULL, 1, 3, '', '', 0, 1),
+(12, '56023006', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวพุทธิพัทธ์ มีอ่วม', NULL, '56023006', NULL, NULL, 1, 3, '', '', 0, 1),
+(13, '56023017', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายวัฒชลัช ฐานิศวร์', NULL, '56023017', NULL, NULL, 1, 3, '', '', 0, 1),
+(14, '56023028', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายวันเฉลิม กันทะวงค์', NULL, '56023028', NULL, NULL, 1, 3, '', '', 0, 1),
+(15, '56023039', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายศรัณย์ เชื้อผู้ดี', NULL, '56023039', NULL, NULL, 1, 3, '', '', 0, 1),
+(16, '56023040', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายศุภิสิทธิ์ ไข่กา', NULL, '56023040', NULL, NULL, 1, 3, '', '', 0, 1),
+(17, '56023051', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายสยามรัฐ แก้วตา', NULL, '56023051', NULL, NULL, 1, 3, '', '', 0, 1),
+(18, '56023084', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวหทัยรัตน์ อินงาม', NULL, '56023084', NULL, NULL, 1, 3, '', '', 0, 1),
+(19, '56023095', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายอดิศร บัวผัด', NULL, '56023095', NULL, NULL, 1, 3, '', '', 0, 1),
+(20, '56023129', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวอิษฎา สนิทรำ', NULL, '56023129', NULL, NULL, 1, 3, '', '', 0, 1),
+(21, '56023130', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายเอกชัย บุญเรือง', NULL, '56023130', NULL, NULL, 1, 3, '', '', 0, 1),
+(22, '56023590', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวกรรณิการ์ ทาแกง', NULL, '56023590', NULL, NULL, 1, 3, '', '', 0, 1),
+(23, '56023602', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายกฤษฎา ควบพิมาย', NULL, '56023602', NULL, NULL, 1, 3, '', '', 0, 1),
+(24, '56023613', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายณัฐวัตร ตาเรือนสอน', NULL, '56023613', NULL, NULL, 1, 3, '', '', 0, 1),
+(25, '56023635', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายทัศนัย เคลือบสูงเนิน', NULL, '56023635', NULL, NULL, 1, 3, '', '', 0, 1),
+(26, '56023646', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายยศวรรธน์ สันธิ', NULL, '56023646', NULL, NULL, 1, 3, '', '', 0, 1),
+(27, '56023668', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายอาทิตย์ ถาตุ่ม', NULL, '56023668', NULL, NULL, 1, 3, '', '', 0, 1),
+(28, '56025424', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายพงศกร ไชยปัญญา', NULL, '56025424', NULL, NULL, 1, 3, '', '', 0, 1),
+(29, '56025637', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายธนกร อนะวัชกุล', NULL, '56025637', NULL, NULL, 1, 3, '', '', 0, 1),
+(30, '56025648', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายวัชรพันธ์ ผัดดี', NULL, '56025648', NULL, NULL, 1, 3, '', '', 0, 1),
+(31, '56025659', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวปราณิสา เก่งการ', NULL, '56025659', NULL, NULL, 1, 3, '', '', 0, 1),
+(33, '55023241', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายเกียรติศักดิ์ ไชยวาลย์', '', '55023241', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(34, '55023296', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายณฐภณ รัศมี', '', '55023296', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(35, '55023308', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายภัฐรมินทร์ อินหลี', '', '55023308', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(36, '55023319', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายณัฐพงษ์ ภูสีดิน', '', '55023319', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(37, '55023342', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายติณณภัทร์ ดีปัญญา', '', '55023342', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(38, '55023364', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายธนยุต อบสินธ์', '', '55023364', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(39, '55023386', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายธีรพงศ์ เลิศวรกุล', '', '55023386', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(40, '55023410', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายบัณฑิต สุมารุ', '', '55023410', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(41, '55023443', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายประเสริฐชัย ไชยประเสริฐ', '', '55023443', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(42, '55023454', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวพรพิไล แย้มชุมพร', '', '55023454', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(43, '55023465', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายพีรพล ดุจพันธ์', '', '55023465', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(44, '55023476', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวภัณฑิรา ปานทอง', '', '55023476', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(45, '55023487', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวภัทราภรณ์ ไชยวุฒิ', '', '55023487', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(46, '55023500', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายวนศาสตร์ โสมพันธุ์', '', '55023500', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(47, '55023522', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายศรายุทธ เวียงชัย', '', '55023522', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(48, '55023544', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวสุทธินี หลักคำ', '', '55023544', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(49, '55023577', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายอัครสิทธิ์ ป้องน้ำไผ่', '', '55023577', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(50, '55023599', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นางสาวอารีรัตน์ ภู่เทศ', '', '55023599', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(51, '55025490', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายมนตรี เทียนจันทร์', '', '55025490', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(52, '55025502', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายวงค์วิทิต รูปแฉล้ม', '', '55025502', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(53, '55025513', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายสธน บุญล้ำ', '', '55025513', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(54, '55026042', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายธงชัย แสขา', '', '55026042', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1),
+(55, '55026064', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 1, 1, 'นายมนทวัส กำจรเกียรติสกุล', '', '55026064', NULL, '2014-10-12 18:29:01', 1, 3, NULL, NULL, 0, 1);
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `member_has_section`
+-- Table structure for table `member_has_section`
 --
 
 CREATE TABLE IF NOT EXISTS `member_has_section` (
@@ -231,12 +344,47 @@ CREATE TABLE IF NOT EXISTS `member_has_section` (
   `member_id` int(11) NOT NULL COMMENT 'หมายเลขสมาชิก',
   `section_id` int(11) NOT NULL COMMENT 'หมู่เรียน',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 DELAY_KEY_WRITE=1 AUTO_INCREMENT=30 ;
+
+--
+-- Dumping data for table `member_has_section`
+--
+
+INSERT INTO `member_has_section` (`id`, `member_id`, `section_id`) VALUES
+(1, 2, 1),
+(2, 31, 1),
+(3, 30, 1),
+(4, 29, 1),
+(5, 28, 1),
+(6, 27, 1),
+(7, 26, 1),
+(8, 25, 1),
+(9, 24, 1),
+(10, 23, 1),
+(11, 22, 1),
+(12, 21, 1),
+(13, 20, 1),
+(14, 19, 1),
+(15, 18, 1),
+(16, 17, 1),
+(17, 16, 1),
+(18, 15, 1),
+(19, 14, 1),
+(20, 13, 1),
+(21, 12, 1),
+(22, 11, 1),
+(23, 10, 1),
+(24, 9, 1),
+(25, 8, 1),
+(26, 7, 1),
+(27, 6, 1),
+(28, 5, 1),
+(29, 2, 2);
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `prefix`
+-- Table structure for table `prefix`
 --
 
 CREATE TABLE IF NOT EXISTS `prefix` (
@@ -244,20 +392,21 @@ CREATE TABLE IF NOT EXISTS `prefix` (
   `valueTh` varchar(45) DEFAULT NULL COMMENT 'คำนำหน้าภาษาไทย',
   `valueEn` varchar(45) DEFAULT NULL COMMENT 'คำนำหน้าภาษาอังกฤษ',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- dump ตาราง `prefix`
+-- Dumping data for table `prefix`
 --
 
 INSERT INTO `prefix` (`id`, `valueTh`, `valueEn`) VALUES
 (1, 'นาย', 'Mr.'),
-(2, 'นาง,นางสาว', 'Ms.,Mrs.,Miss');
+(2, 'นางสาว', 'Miss'),
+(4, 'นาง', 'Mrs.');
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `privilege`
+-- Table structure for table `privilege`
 --
 
 CREATE TABLE IF NOT EXISTS `privilege` (
@@ -267,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `privilege` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
--- dump ตาราง `privilege`
+-- Dumping data for table `privilege`
 --
 
 INSERT INTO `privilege` (`id`, `value`) VALUES
@@ -278,7 +427,7 @@ INSERT INTO `privilege` (`id`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `section`
+-- Table structure for table `section`
 --
 
 CREATE TABLE IF NOT EXISTS `section` (
@@ -286,12 +435,21 @@ CREATE TABLE IF NOT EXISTS `section` (
   `value` int(11) DEFAULT NULL COMMENT 'หมู่เรียนที่',
   `courseonSemester_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `section`
+--
+
+INSERT INTO `section` (`id`, `value`, `courseonSemester_id`) VALUES
+(1, 1, 1),
+(2, 1, 4),
+(3, 2, 4);
 
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `semester`
+-- Table structure for table `semester`
 --
 
 CREATE TABLE IF NOT EXISTS `semester` (
@@ -301,7 +459,7 @@ CREATE TABLE IF NOT EXISTS `semester` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- dump ตาราง `semester`
+-- Dumping data for table `semester`
 --
 
 INSERT INTO `semester` (`id`, `value`) VALUES
@@ -312,7 +470,106 @@ INSERT INTO `semester` (`id`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `tel`
+-- Table structure for table `tbl_answerlog`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_answerlog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) DEFAULT NULL,
+  `questionId` int(11) DEFAULT NULL,
+  `answer` varchar(45) DEFAULT NULL,
+  `submitTime` datetime DEFAULT NULL,
+  `timeTaken` varchar(45) DEFAULT NULL,
+  `ip` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_questions`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sequenceNo` int(11) DEFAULT NULL,
+  `question` varchar(45) DEFAULT NULL,
+  `answer` varchar(45) DEFAULT NULL,
+  `choice` varchar(45) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `testId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `tbl_questions`
+--
+
+INSERT INTO `tbl_questions` (`id`, `sequenceNo`, `question`, `answer`, `choice`, `type`, `testId`) VALUES
+(1, 1, 'who are you', 'dang', '1', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_test`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_test` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  `startTime` datetime DEFAULT NULL,
+  `stopTime` datetime DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `verifyAnswer` int(11) DEFAULT NULL,
+  `maxSkips` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `tbl_test`
+--
+
+INSERT INTO `tbl_test` (`id`, `title`, `description`, `startTime`, `stopTime`, `duration`, `verifyAnswer`, `maxSkips`) VALUES
+(1, 'TestQuiz', 'Test\r\nfor quiz', '2014-05-01 00:00:00', '2014-05-01 10:00:00', 60, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_testlog`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_testlog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) DEFAULT NULL,
+  `testId` int(11) DEFAULT NULL,
+  `startTime` datetime DEFAULT NULL,
+  `sessionId` varchar(45) DEFAULT NULL,
+  `ip` varchar(45) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_user`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) DEFAULT NULL,
+  `password` varchar(45) DEFAULT NULL,
+  `salt` varchar(45) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tel`
 --
 
 CREATE TABLE IF NOT EXISTS `tel` (
@@ -326,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `tel` (
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `university`
+-- Table structure for table `university`
 --
 
 CREATE TABLE IF NOT EXISTS `university` (
@@ -338,7 +595,7 @@ CREATE TABLE IF NOT EXISTS `university` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- dump ตาราง `university`
+-- Dumping data for table `university`
 --
 
 INSERT INTO `university` (`id`, `valueTh`, `valueEn`, `abb`) VALUES
@@ -347,7 +604,7 @@ INSERT INTO `university` (`id`, `valueTh`, `valueEn`, `abb`) VALUES
 -- --------------------------------------------------------
 
 --
--- โครงสร้างตาราง `yeared`
+-- Table structure for table `yeared`
 --
 
 CREATE TABLE IF NOT EXISTS `yeared` (
@@ -357,12 +614,34 @@ CREATE TABLE IF NOT EXISTS `yeared` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=6 ;
 
 --
--- dump ตาราง `yeared`
+-- Dumping data for table `yeared`
 --
 
 INSERT INTO `yeared` (`id`, `value`) VALUES
 (4, 2556),
 (5, 2557);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `yiicache`
+--
+
+CREATE TABLE IF NOT EXISTS `yiicache` (
+  `id` char(128) NOT NULL,
+  `expire` int(11) DEFAULT NULL,
+  `value` longblob,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `yiicache`
+--
+
+INSERT INTO `yiicache` (`id`, `expire`, `value`) VALUES
+('245bae0941d73dc8e639e6a9d59e95b1', 1399841813, 0x613a323a7b693a303b4f3a31373a22434d7973716c5461626c65536368656d61223a393a7b733a31303a22736368656d614e616d65223b4e3b733a343a226e616d65223b733a383a2274626c5f74657374223b733a373a227261774e616d65223b733a31303a226074626c5f7465737460223b733a31303a227072696d6172794b6579223b733a323a226964223b733a31323a2273657175656e63654e616d65223b4e3b733a31313a22666f726569676e4b657973223b613a303a7b7d733a373a22636f6c756d6e73223b613a383a7b733a323a226964223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a323a226964223b733a373a227261774e616d65223b733a343a2260696460223b733a393a22616c6c6f774e756c6c223b623a303b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a313b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a353a227469746c65223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a353a227469746c65223b733a373a227261774e616d65223b733a373a22607469746c6560223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a31313a227661726368617228343529223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a34353b733a393a22707265636973696f6e223b693a34353b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a31313a226465736372697074696f6e223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a31313a226465736372697074696f6e223b733a373a227261774e616d65223b733a31333a22606465736372697074696f6e60223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a31313a227661726368617228343529223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a34353b733a393a22707265636973696f6e223b693a34353b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a393a22737461727454696d65223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a393a22737461727454696d65223b733a373a227261774e616d65223b733a31313a2260737461727454696d6560223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a383a226461746574696d65223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b4e3b733a393a22707265636973696f6e223b4e3b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a383a2273746f7054696d65223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a383a2273746f7054696d65223b733a373a227261774e616d65223b733a31303a226073746f7054696d6560223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a383a226461746574696d65223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b4e3b733a393a22707265636973696f6e223b4e3b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a383a226475726174696f6e223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a383a226475726174696f6e223b733a373a227261774e616d65223b733a31303a22606475726174696f6e60223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a31323a22766572696679416e73776572223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a31323a22766572696679416e73776572223b733a373a227261774e616d65223b733a31343a2260766572696679416e7377657260223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a383a226d6178536b697073223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a383a226d6178536b697073223b733a373a227261774e616d65223b733a31303a22606d6178536b69707360223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d7d733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d693a313b4e3b7d),
+('2bdcd30c739e455be90c722f58ef7259', 0, 0x613a323a7b693a303b613a323a7b693a303b613a333a7b693a303b4f3a383a224355726c52756c65223a31363a7b733a393a2275726c537566666978223b4e3b733a31333a226361736553656e736974697665223b4e3b733a31333a2264656661756c74506172616d73223b613a303a7b7d733a31303a226d6174636856616c7565223b4e3b733a343a2276657262223b4e3b733a31313a2270617273696e674f6e6c79223b623a303b733a353a22726f757465223b733a31373a223c636f6e74726f6c6c65723e2f76696577223b733a31303a227265666572656e636573223b613a313a7b733a31303a22636f6e74726f6c6c6572223b733a31323a223c636f6e74726f6c6c65723e223b7d733a31323a22726f7574655061747465726e223b733a33303a222f5e283f503c636f6e74726f6c6c65723e5c772b295c2f76696577242f75223b733a373a227061747465726e223b733a33393a222f5e283f503c636f6e74726f6c6c65723e5c772b295c2f283f503c69643e5c642b295c2f242f75223b733a383a2274656d706c617465223b733a31373a223c636f6e74726f6c6c65723e2f3c69643e223b733a363a22706172616d73223b613a313a7b733a323a226964223b733a333a225c642b223b7d733a363a22617070656e64223b623a303b733a31313a22686173486f7374496e666f223b623a303b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d693a313b4f3a383a224355726c52756c65223a31363a7b733a393a2275726c537566666978223b4e3b733a31333a226361736553656e736974697665223b4e3b733a31333a2264656661756c74506172616d73223b613a303a7b7d733a31303a226d6174636856616c7565223b4e3b733a343a2276657262223b4e3b733a31313a2270617273696e674f6e6c79223b623a303b733a353a22726f757465223b733a32313a223c636f6e74726f6c6c65723e2f3c616374696f6e3e223b733a31303a227265666572656e636573223b613a323a7b733a31303a22636f6e74726f6c6c6572223b733a31323a223c636f6e74726f6c6c65723e223b733a363a22616374696f6e223b733a383a223c616374696f6e3e223b7d733a31323a22726f7574655061747465726e223b733a34313a222f5e283f503c636f6e74726f6c6c65723e5c772b295c2f283f503c616374696f6e3e5c772b29242f75223b733a373a227061747465726e223b733a35363a222f5e283f503c636f6e74726f6c6c65723e5c772b295c2f283f503c616374696f6e3e5c772b295c2f283f503c69643e5c642b295c2f242f75223b733a383a2274656d706c617465223b733a32363a223c636f6e74726f6c6c65723e2f3c616374696f6e3e2f3c69643e223b733a363a22706172616d73223b613a313a7b733a323a226964223b733a333a225c642b223b7d733a363a22617070656e64223b623a303b733a31313a22686173486f7374496e666f223b623a303b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d693a323b4f3a383a224355726c52756c65223a31363a7b733a393a2275726c537566666978223b4e3b733a31333a226361736553656e736974697665223b4e3b733a31333a2264656661756c74506172616d73223b613a303a7b7d733a31303a226d6174636856616c7565223b4e3b733a343a2276657262223b4e3b733a31313a2270617273696e674f6e6c79223b623a303b733a353a22726f757465223b733a32313a223c636f6e74726f6c6c65723e2f3c616374696f6e3e223b733a31303a227265666572656e636573223b613a323a7b733a31303a22636f6e74726f6c6c6572223b733a31323a223c636f6e74726f6c6c65723e223b733a363a22616374696f6e223b733a383a223c616374696f6e3e223b7d733a31323a22726f7574655061747465726e223b733a34313a222f5e283f503c636f6e74726f6c6c65723e5c772b295c2f283f503c616374696f6e3e5c772b29242f75223b733a373a227061747465726e223b733a34333a222f5e283f503c636f6e74726f6c6c65723e5c772b295c2f283f503c616374696f6e3e5c772b295c2f242f75223b733a383a2274656d706c617465223b733a32313a223c636f6e74726f6c6c65723e2f3c616374696f6e3e223b733a363a22706172616d73223b613a303a7b7d733a363a22617070656e64223b623a303b733a31313a22686173486f7374496e666f223b623a303b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d7d693a313b733a33323a223434393832613234336433633331393564353161616333643333613266363336223b7d693a313b4e3b7d),
+('99efed95589ae715687b8c0cdb8b2fd6', 1399841978, 0x613a323a7b693a303b4f3a31373a22434d7973716c5461626c65536368656d61223a393a7b733a31303a22736368656d614e616d65223b4e3b733a343a226e616d65223b733a31333a2274626c5f7175657374696f6e73223b733a373a227261774e616d65223b733a31353a226074626c5f7175657374696f6e7360223b733a31303a227072696d6172794b6579223b733a323a226964223b733a31323a2273657175656e63654e616d65223b733a303a22223b733a31313a22666f726569676e4b657973223b613a303a7b7d733a373a22636f6c756d6e73223b613a373a7b733a323a226964223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a323a226964223b733a373a227261774e616d65223b733a343a2260696460223b733a393a22616c6c6f774e756c6c223b623a303b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a313b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a313b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a31303a2273657175656e63654e6f223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a31303a2273657175656e63654e6f223b733a373a227261774e616d65223b733a31323a226073657175656e63654e6f60223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a383a227175657374696f6e223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a383a227175657374696f6e223b733a373a227261774e616d65223b733a31303a22607175657374696f6e60223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a31313a227661726368617228343529223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a34353b733a393a22707265636973696f6e223b693a34353b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a363a22616e73776572223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a363a22616e73776572223b733a373a227261774e616d65223b733a383a2260616e7377657260223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a31313a227661726368617228343529223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a34353b733a393a22707265636973696f6e223b693a34353b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a363a2263686f696365223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a363a2263686f696365223b733a373a227261774e616d65223b733a383a226063686f69636560223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a31313a227661726368617228343529223b733a343a2274797065223b733a363a22737472696e67223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a34353b733a393a22707265636973696f6e223b693a34353b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a343a2274797065223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a343a2274797065223b733a373a227261774e616d65223b733a363a22607479706560223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d733a363a22746573744964223b4f3a31383a22434d7973716c436f6c756d6e536368656d61223a31353a7b733a343a226e616d65223b733a363a22746573744964223b733a373a227261774e616d65223b733a383a226074657374496460223b733a393a22616c6c6f774e756c6c223b623a313b733a363a22646254797065223b733a373a22696e7428313129223b733a343a2274797065223b733a373a22696e7465676572223b733a31323a2264656661756c7456616c7565223b4e3b733a343a2273697a65223b693a31313b733a393a22707265636973696f6e223b693a31313b733a353a227363616c65223b4e3b733a31323a2269735072696d6172794b6579223b623a303b733a31323a226973466f726569676e4b6579223b623a303b733a31333a226175746f496e6372656d656e74223b623a303b733a373a22636f6d6d656e74223b733a303a22223b733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d7d733a31343a220043436f6d706f6e656e74005f65223b4e3b733a31343a220043436f6d706f6e656e74005f6d223b4e3b7d693a313b4e3b7d);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -23,12 +23,21 @@ class WebUser extends CWebUser {
   	}else return null;
   	return $privilege->value;  
   }
+  
+  function getPrivilegeId($pVal){
+  		$privilege = Privilege::model()->find(' value = \''.$pVal.'\' ');
+  	return $privilege->id;
+  }
  
   // This is a function that checks the field 'role'
   // in the User model to be equal to 1, that means it's admin
   // access it by Yii::app()->user->isAdmin()
   function isAdmin(){
   	return ( Yii::app()->user->getPrivilege() === "administrator")?1:0;
+  }
+  
+  function isTeacher(){
+  	return ( Yii::app()->user->getPrivilege() === "teacher")?1:0;
   }
   
   function isStudent(){

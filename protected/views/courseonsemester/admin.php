@@ -1,4 +1,11 @@
 <?php
+$cs = Yii::app()->getClientScript();
+$cs->registerCss('tabcss','
+		.items th,.items th a {
+		background-color:#0D0;
+		color:#00F;
+}
+		');
 /* @var $this CourseonsemesterController */
 /* @var $model Courseonsemester */
 
@@ -8,8 +15,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Courseonsemester', 'url'=>array('index')),
-	array('label'=>'Create Courseonsemester', 'url'=>array('create')),
+	array('label'=>'เพิ่มรายวิชาลงทะเบียน','url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -26,7 +32,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Courseonsemesters</h1>
+<h1>จัดการรายวิชาในแต่ละภาคการศึกษา</h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -40,17 +46,30 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'courseonsemester-grid',
+		'type'=>'striped bordered condensed',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'course_id',
-		'semester_id',
-		'yeared_id',
+			array('header'=>'No.',
+					'value'=>'++$row',//'++$row',
+					'htmlOptions'=>array('style'=>'width:20px;'),
+			),
+		array('name'=>'course',
+				'value'=>'$data->course->code."<br>".$data->course->valueTh."<br>".$data->course->valueEn',
+				'type'=>'raw',
+		),
+		array('name'=>'semester_id',
+				'value'=>'$data->semester->value',
+				'filter'=>CHtml::listData(Semester::model()->findAll(),'id','value'),
+		),
+		array('name'=>'yeared_id',
+				'value'=>'$data->yeared->value',
+				'filter'=>CHtml::listData(Yeared::model()->findAll(),'id','value'),
+		),
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),
 	),
 )); ?>
